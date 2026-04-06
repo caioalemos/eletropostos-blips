@@ -589,6 +589,12 @@ footer p { font-size:11px; color:#3a5a6a; font-family:'DM Mono',monospace; }
     <div class="ev-kpi"><div class="ev-kpi-label">Market share BYD</div><div class="ev-kpi-val">71,3%</div></div>
   </div>
   <div class="ev-controls reveal">
+    <label>Tipo:</label>
+    <select id="evFiltroTipo" onchange="evRender()">
+      <option value="">Todos</option>
+      <option value="BEV">BEV — Elétrico puro</option>
+      <option value="PHEV">PHEV — Híbrido plug-in</option>
+    </select>
     <label>Marca:</label>
     <select id="evFiltroMarca" onchange="evRender()">
       <option value="">Todas</option>
@@ -599,6 +605,7 @@ footer p { font-size:11px; color:#3a5a6a; font-family:'DM Mono',monospace; }
       <option value="Renault">Renault</option>
       <option value="GM/Chevrolet">GM/Chevrolet</option>
       <option value="JAC">JAC</option>
+      <option value="Caoa Chery">Caoa Chery</option>
     </select>
     <label>Buscar:</label>
     <input type="text" id="evBusca" placeholder="Modelo..." oninput="evRender()" style="width:140px;">
@@ -613,7 +620,7 @@ footer p { font-size:11px; color:#3a5a6a; font-family:'DM Mono',monospace; }
     <table class="ev-table">
       <thead>
         <tr>
-          <th onclick="evSort('modelo')">Modelo <span id="earr-modelo"></span></th>
+          <th onclick="evSort('tipo')">Tipo <span id="earr-tipo"></span></th><th onclick="evSort('modelo')">Modelo <span id="earr-modelo"></span></th>
           <th onclick="evSort('marca')">Marca <span id="earr-marca"></span></th>
           <th onclick="evSort('mkt')">Mkt. share <span id="earr-mkt"></span></th>
           <th onclick="evSort('ac')">AC máx. <span id="earr-ac"></span></th>
@@ -940,22 +947,32 @@ document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
 // ---- EV TABLE ----
 const evData = [
-  { modelo:'Dolphin Mini',     marca:'BYD',          mkt:40.0, ac:6.6,  dc:40,  bat:38.0,  auto:280 },
-  { modelo:'Dolphin (GS)',     marca:'BYD',          mkt:18.7, ac:7.0,  dc:60,  bat:44.9,  auto:291 },
-  { modelo:'Yuan Plus / Pro',  marca:'BYD',          mkt:7.5,  ac:7.0,  dc:80,  bat:60.4,  auto:420 },
-  { modelo:'Seal',             marca:'BYD',          mkt:4.2,  ac:11.0, dc:150, bat:82.6,  auto:570 },
-  { modelo:'EX30',             marca:'Volvo',        mkt:6.4,  ac:11.0, dc:134, bat:69.0,  auto:480 },
-  { modelo:'EX2',              marca:'Geely',        mkt:4.2,  ac:7.0,  dc:70,  bat:39.4,  auto:289 },
-  { modelo:'EX5',              marca:'Geely',        mkt:2.7,  ac:7.0,  dc:100, bat:60.2,  auto:349 },
-  { modelo:'Ora 03',           marca:'GWM',          mkt:1.2,  ac:6.6,  dc:80,  bat:48.0,  auto:232 },
-  { modelo:'Spark EUV',        marca:'GM/Chevrolet', mkt:0.8,  ac:6.6,  dc:50,  bat:42.0,  auto:300 },
-  { modelo:'Kwid E-Tech',      marca:'Renault',      mkt:0.6,  ac:7.4,  dc:30,  bat:26.8,  auto:180 },
-  { modelo:'E-JS1',            marca:'JAC',          mkt:0.4,  ac:6.6,  dc:40,  bat:30.0,  auto:210 },
-  { modelo:'Sealion 05',       marca:'BYD',          mkt:0.3,  ac:11.0, dc:100, bat:61.4,  auto:420 },
-  { modelo:'Tan',              marca:'BYD',          mkt:0.2,  ac:7.0,  dc:110, bat:108.8, auto:500 },
+  { modelo:'Dolphin Mini',     marca:'BYD',          tipo:'BEV',  mkt:40.0, ac:6.6,  dc:40,  bat:38.0,  auto:280  },
+  { modelo:'Dolphin (GS)',     marca:'BYD',          tipo:'BEV',  mkt:18.7, ac:7.0,  dc:60,  bat:44.9,  auto:291  },
+  { modelo:'Yuan Plus / Pro',  marca:'BYD',          tipo:'BEV',  mkt:7.5,  ac:7.0,  dc:80,  bat:60.4,  auto:420  },
+  { modelo:'Seal',             marca:'BYD',          tipo:'BEV',  mkt:4.2,  ac:11.0, dc:150, bat:82.6,  auto:570  },
+  { modelo:'EX30',             marca:'Volvo',        tipo:'BEV',  mkt:6.4,  ac:11.0, dc:134, bat:69.0,  auto:480  },
+  { modelo:'EX2',              marca:'Geely',        tipo:'BEV',  mkt:4.2,  ac:7.0,  dc:70,  bat:39.4,  auto:289  },
+  { modelo:'EX5',              marca:'Geely',        tipo:'BEV',  mkt:2.7,  ac:7.0,  dc:100, bat:60.2,  auto:349  },
+  { modelo:'Ora 03',           marca:'GWM',          tipo:'BEV',  mkt:1.2,  ac:6.6,  dc:80,  bat:48.0,  auto:232  },
+  { modelo:'Spark EUV',        marca:'GM/Chevrolet', tipo:'BEV',  mkt:0.8,  ac:6.6,  dc:50,  bat:42.0,  auto:300  },
+  { modelo:'Kwid E-Tech',      marca:'Renault',      tipo:'BEV',  mkt:0.6,  ac:7.4,  dc:30,  bat:26.8,  auto:180  },
+  { modelo:'E-JS1',            marca:'JAC',          tipo:'BEV',  mkt:0.4,  ac:6.6,  dc:40,  bat:30.0,  auto:210  },
+  { modelo:'Sealion 05',       marca:'BYD',          tipo:'BEV',  mkt:0.3,  ac:11.0, dc:100, bat:61.4,  auto:420  },
+  { modelo:'Tan',              marca:'BYD',          tipo:'BEV',  mkt:0.2,  ac:7.0,  dc:110, bat:108.8, auto:500  },
+  { modelo:'Song Pro',         marca:'BYD',          tipo:'PHEV', mkt:13.8, ac:6.6,  dc:null,bat:18.3,  auto:68   },
+  { modelo:'Song Plus',        marca:'BYD',          tipo:'PHEV', mkt:10.5, ac:6.6,  dc:null,bat:18.3,  auto:68   },
+  { modelo:'King',             marca:'BYD',          tipo:'PHEV', mkt:7.7,  ac:6.6,  dc:null,bat:15.0,  auto:80   },
+  { modelo:'Haval H6 PHEV34',  marca:'GWM',          tipo:'PHEV', mkt:5.8,  ac:6.6,  dc:40,  bat:34.0,  auto:113  },
+  { modelo:'Haval H6 PHEV19',  marca:'GWM',          tipo:'PHEV', mkt:3.0,  ac:6.6,  dc:33,  bat:19.0,  auto:74   },
+  { modelo:'XC60 T8',          marca:'Volvo',        tipo:'PHEV', mkt:1.5,  ac:11.0, dc:null,bat:18.8,  auto:55   },
+  { modelo:'Shark',            marca:'BYD',          tipo:'PHEV', mkt:0.8,  ac:6.6,  dc:null,bat:29.0,  auto:100  },
+  { modelo:'Tank 300 PHEV',    marca:'GWM',          tipo:'PHEV', mkt:0.5,  ac:6.6,  dc:null,bat:19.0,  auto:60   },
+  { modelo:'Tiggo 8 PHEV',     marca:'Caoa Chery',   tipo:'PHEV', mkt:0.4,  ac:6.6,  dc:null,bat:18.4,  auto:60   },
 ];
-const bClass = { 'BYD':'b-byd','Volvo':'b-volvo','GWM':'b-gwm','Geely':'b-geely','Renault':'b-renault','GM/Chevrolet':'b-gm','JAC':'b-jac' };
+const bClass = { 'BYD':'b-byd','Volvo':'b-volvo','GWM':'b-gwm','Geely':'b-geely','Renault':'b-renault','GM/Chevrolet':'b-gm','JAC':'b-jac','Caoa Chery':'b-jac' };
 function calcT(bat,dcMax,charger){
+  if(!dcMax){ return {txt:'—',val:9999}; }
   const pot=Math.min(dcMax,charger);
   const min=Math.round((bat*0.80)/(pot*0.90)*60);
   const h=Math.floor(min/60),m=min%60;
@@ -966,11 +983,12 @@ evData.forEach(r=>{ r.t30=calcT(r.bat,r.dc,30).val; r.t30txt=calcT(r.bat,r.dc,30
 let evCol='mkt', evDir=-1;
 function evSort(c){ evDir=evCol===c?evDir*-1:-1; evCol=c; evRender(); }
 function evRender(){
+  const tp=document.getElementById('evFiltroTipo').value;
   const m=document.getElementById('evFiltroMarca').value;
   const b=document.getElementById('evBusca').value.toLowerCase();
-  let rows=evData.filter(r=>(!m||r.marca===m)&&(!b||r.modelo.toLowerCase().includes(b)||r.marca.toLowerCase().includes(b)));
+  let rows=evData.filter(r=>(!tp||r.tipo===tp)&&(!m||r.marca===m)&&(!b||r.modelo.toLowerCase().includes(b)||r.marca.toLowerCase().includes(b)));
   rows.sort((a,z)=>typeof a[evCol]==='string'?evDir*a[evCol].localeCompare(z[evCol]):evDir*(a[evCol]-z[evCol]));
-  ['modelo','marca','mkt','ac','dc','bat','t30','t60','auto'].forEach(c=>{
+  ['tipo','modelo','marca','mkt','ac','dc','bat','t30','t60','auto'].forEach(c=>{
     const el=document.getElementById('earr-'+c);
     if(el) el.textContent=evCol===c?(evDir>0?' ▲':' ▼'):'';
   });
@@ -978,11 +996,13 @@ function evRender(){
   const maxT60=Math.max(...rows.map(r=>r.t60));
   document.getElementById('evTbody').innerHTML=rows.map(r=>{
     const bc=bClass[r.marca]||'b-jac';
+    const tipoCls=r.tipo==='BEV'?'style="background:rgba(10,191,188,0.15);color:#0ABFBC;border:1px solid rgba(10,191,188,0.25);"':'style="background:rgba(245,166,35,0.15);color:#F5A623;border:1px solid rgba(245,166,35,0.25);"';
     const w30=Math.round((r.t30/maxT30)*100);
     const w60=Math.round((r.t60/maxT60)*100);
     const n30=r.dc<=30?'<span class="tempo-nota">carregador limita carro</span>':'';
     const n60=r.dc<=60?'<span class="tempo-nota">carregador limita carro</span>':'';
     return `<tr>
+      <td><span class="ev-badge" ${tipoCls}>${r.tipo}</span></td>
       <td style="font-weight:600;color:#e0eaf5;">${r.modelo}</td>
       <td><span class="ev-badge ${bc}">${r.marca}</span></td>
       <td><div style="font-size:12px;font-weight:600;color:#e0eaf5;margin-bottom:3px;">${r.mkt.toFixed(1)}%</div><div class="mkt-bar" style="width:${Math.min(r.mkt/45*100,100).toFixed(0)}%;"></div></td>
@@ -991,7 +1011,7 @@ function evRender(){
       <td style="color:#88AABB;">${r.bat} kWh</td>
       <td><span class="tempo-val ${spd(r.t30)}">${r.t30txt}</span><div class="tempo-bar" style="width:${w30}%;background:#D85A30;"></div>${n30}</td>
       <td><span class="tempo-val ${spd(r.t60)}">${r.t60txt}</span><div class="tempo-bar" style="width:${w60}%;background:#BA7517;"></div>${n60}</td>
-      <td style="color:#88AABB;">${r.auto} km</td>
+      <td style="color:#88AABB;">${r.auto} km${r.tipo==='PHEV'?' <span style="font-size:9px;color:#5a7a8a;">(elét.)</span>':''}</td>
     </tr>`;
   }).join('');
 }
